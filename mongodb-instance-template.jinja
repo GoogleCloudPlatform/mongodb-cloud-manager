@@ -1,0 +1,74 @@
+resources:
+- type: compute.v1.disk
+  name: {{ env["name"] }}-data
+  properties:
+    zone: {{ properties["zone"] }}
+    sizeGb: 500
+    type: projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/diskTypes/pd-ssd 
+
+- type: compute.v1.instance
+  name: {{ env["name"] }}
+  properties:
+    zone: {{ properties["zone"] }}
+    machineType: zones/{{ properties["zone"] }}/machineTypes/{{ properties["machine-type"] }}
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams: 
+        sourceImage: projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts
+        # sourceImage: https://www.googleapis.com/compute/v1/projects/click-to-deploy-images/global/images/family/mongodb-cloud-manager-bootstrap
+    - deviceName: {{ env["name"] }}-data
+      type: PERSISTENT
+      autoDelete: false
+      source: $(ref.{{ env["name"] }}-data.selfLink)
+    networkInterfaces:
+    - network: global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+
+          # change to /root
+          cd /root
+
+          # set transparent_hugepage/enabled and transparent_hugepage/defrag to never
+          echo never > /sys/kernel/mm/transparent_hugepage/enabled
+          echo never > /sys/kernel/mm/transparent_hugepage/defrag
+
+          # download the latest mongodb cloud manager agent
+          curl -OL https://cloud.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager_2.7.2.1653-1_amd64.ubuntu1604.deb
+          
+          # install the mongodb cloud manager agent
+          dpkg -i mongodb-mms-automation-agent-manager_2.7.2.1653-1_amd64.ubuntu1604.deb
+
+          # configure the agent with cloud manager mmsGroupId and mmsApiKey
+          sed -i '/mmsGroupId/c\mmsGroupId={{ properties["mmsGroupId"] }}' /etc/mongodb-mms/automation-agent.config
+          sed -i '/mmsApiKey/c\mmsApiKey={{ properties["mmsApiKey"] }}' /etc/mongodb-mms/automation-agent.config
+
+          # create filesystem on persistent storage
+          mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/google-{{ env["name"] }}-data
+
+          # create mongodb data directory
+          mkdir /data
+
+          # mount persistent disk
+          mount -o discard,defaults /dev/disk/by-id/google-{{ env["name"] }}-data /data
+
+          # set data directory ownership
+          chown mongodb:mongodb /data
+
+          # add an entry to /etc/fstab for persistent disk
+          echo '/dev/disk/by-id/google-{{ env["name"] }}-data /data ext4 discard,defaults 1 1' | tee -a /etc/fstab
+
+          # start the mongodb cloud manager agent
+          systemctl start mongodb-mms-automation-agent.service
+    tags:
+      items:
+      - mongodb-cloud-manager-bootstrap
+
