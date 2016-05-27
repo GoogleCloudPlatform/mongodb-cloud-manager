@@ -13,8 +13,7 @@ Bootstrap multiple Google Compute Engine instances with the MongoDB Cloud Manage
 
 ### MongoDB Cloud Manager
 - [MongoDB Cloud Manager](https://www.mongodb.com/cloud) account
-- Navigate to `Cloud Manager > Deployment > Agents > Downloads and Settings`
-- Click on one of the Automation Agent links and capture the [mmsGroupId](https://docs.cloud.mongodb.com/reference/automation-agent/#asetting.mmsGroupId) and [mmsApiKey](https://docs.cloud.mongodb.com/reference/automation-agent/#asetting.mmsApiKey)
+- Navigate to `Cloud Manager > Settings > Group Settings` and copy the `Group ID` and `Agent API Key` at the top of the page, you will need these value below.
 
 ## Deploy Instances
 
@@ -32,12 +31,17 @@ properties:
 
   mmsGroupId:
     type: string
-    default: MMSGROUPID
+    default: GROUPID
 
   mmsApiKey:
     type: string
-    default: MMSAPIKEY
+    default: AGENTAPIKEY
 ```
+
+- `machine-type`: can be any of the [predefined machine types](https://cloud.google.com/compute/docs/machine-types#predefined_machine_types) (custom machine types not supported at this time)
+- `zone`: can be any of the [available regions & zones](https://cloud.google.com/compute/docs/regions-zones/regions-zones#available)
+- `mmsGroupId`: should be set to the value from `Group ID` above
+- `mmsApiKey`: should be set to the value from `Agent API Key` above
 
 Next, create the deployment using the Deployment Manager configuration:
 
@@ -47,7 +51,7 @@ The Deployment Manager template will create 3 500GB Persistent SSDs and attach t
 
 ## Deploy MongoDB using Cloud Manager
 
-Once the instances have completed the setup process, they should be visible in Cloud Manager interface via `Deployment > Servers`.
+Once the instances have completed the setup process, they should be visible via `Cloud Manager > Deployment > Servers`.
 
 ## Clean Up
 
