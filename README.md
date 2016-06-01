@@ -15,37 +15,46 @@ Bootstrap multiple Google Compute Engine instances with the MongoDB Cloud Manage
 - [MongoDB Cloud Manager](https://www.mongodb.com/cloud) account
 - Navigate to `Cloud Manager > Settings > Group Settings` and copy the `Group ID` and `Agent API Key` at the top of the page, you will need these value below.
 
-## Deploy Instances
+## Deploying Configuration
 
-First, update the following default property values in the `mongodb-instance-template.jinja.schema` file:
+### Properties
 
-```yaml
-properties:
-  machine-type:
-    type: string
-    default: n1-standard-4
+The Deployment Manager template uses a [schema](https://cloud.google.com/deployment-manager/configuration/using-schemas) that defines and describes the properties required for the deployment:
 
-  zone:
-    type: string
-    default: us-central1-f
+`machineType`
 
-  mmsGroupId:
-    type: string
-    default: GROUPID
+- Default value is `n1-highmem-2`
+- Can be any of the available [predefined machine types](https://cloud.google.com/compute/docs/machine-types#predefined_machine_types)
+- For [custom machine types](https://cloud.google.com/compute/docs/machine-types#custom_machine_types) refer to the [machineType URL spec](https://cloud.google.com/compute/docs/reference/latest/instances#resource-representations)
 
-  mmsApiKey:
-    type: string
-    default: AGENTAPIKEY
-```
+`zone`
 
-- `machine-type`: can be any of the [predefined machine types](https://cloud.google.com/compute/docs/machine-types#predefined_machine_types) (custom machine types not supported at this time)
-- `zone`: can be any of the [available regions & zones](https://cloud.google.com/compute/docs/regions-zones/regions-zones#available)
-- `mmsGroupId`: should be set to the value from `Group ID` above
-- `mmsApiKey`: should be set to the value from `Agent API Key` above
+- Default value is `us-central1-f`
+- Can be any of the [available regions & zones](https://cloud.google.com/compute/docs/regions-zones/regions-zones#available)
 
-Next, create the deployment using the Deployment Manager configuration:
+`mmsGroupId`
 
-    $ gcloud deployment-manager deployments create mongodb-cloud-manager --config mongodb-cloud-manager.yaml
+- No default value set
+- Use the value from `Group Id` above when deploying (see example below)
+
+`mmsApiKey`
+
+- No default value set
+- Use the value from `Agent API Key` above when deploying (see example below)
+
+### Creating Deployment
+
+Create the deployment using the Deployment Manager configuration:
+
+    $ gcloud deployment-manager deployments create mongodb-cloud-manager \
+      --config mongodb-cloud-manager.jinja \
+      --properties mmsGroupId=MMSGROUPID,mmsApiKey=MMSAPIKEY
+
+Optionally, to override the default values for `machineType` or `zone` use the following:
+
+    $ gcloud deployment-manager deployments create mongodb-cloud-manager \
+      --config mongodb-cloud-manager.jinja \
+      --properties machineType=n1-highmem-8,zone=us-central1-d,mmsGroupId=MMSGROUPID,mmsApiKey=MMSAPIKEY
 
 The Deployment Manager template will create 3 500GB Persistent SSDs and attach them to 3 Compute Engine instances. Each instance will run a startup script that configures storage and installs the MongoDB Cloud Manager automation agent.
 
