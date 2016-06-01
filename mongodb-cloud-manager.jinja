@@ -18,9 +18,22 @@ imports:
 resources:
 - name: mongodb-instance-1
   type: mongodb-instance-template.jinja
+  properties:
+    zone: {{ properties["zone"] }}
+    machineType: {{ properties["machineType"] }}
+    mmsGroupId: {{ properties["mmsGroupId"] }}
+    mmsApiKey: {{ properties["mmsApiKey"] }}
 
 - name: mongodb-instance-2
   type: mongodb-instance-template.jinja
+    zone: {{ properties["zone"] }}
+    machineType: {{ properties["machineType"] }}
+    mmsGroupId: {{ properties["mmsGroupId"] }}
+    mmsApiKey: {{ properties["mmsApiKey"] }}
 
 - name: mongodb-instance-3
   type: mongodb-instance-template.jinja
+    zone: {{ properties["zone"] }}
+    machineType: {{ properties["machineType"] }}
+    mmsGroupId: {{ properties["mmsGroupId"] }}
+    mmsApiKey: {{ properties["mmsApiKey"] }}
