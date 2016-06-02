@@ -24,15 +24,14 @@ resources:
   name: {{ env["name"] }}
   properties:
     zone: {{ properties["zone"] }}
-    machineType: zones/{{ properties["zone"] }}/machineTypes/{{ properties["machine-type"] }}
+    machineType: zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
     disks:
     - deviceName: boot
       type: PERSISTENT
       boot: true
       autoDelete: true
       initializeParams: 
-        sourceImage: projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts
-        # sourceImage: https://www.googleapis.com/compute/v1/projects/click-to-deploy-images/global/images/family/mongodb-cloud-manager-bootstrap
+        sourceImage: https://www.googleapis.com/compute/v1/projects/click-to-deploy-images/global/images/family/mongodb-cloud-manager-bootstrap
     - deviceName: {{ env["name"] }}-data
       type: PERSISTENT
       autoDelete: false
