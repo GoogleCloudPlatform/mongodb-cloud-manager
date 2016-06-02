@@ -26,6 +26,7 @@ resources:
 
 - name: mongodb-instance-2
   type: mongodb-instance-template.jinja
+  properties:
     zone: {{ properties["zone"] }}
     machineType: {{ properties["machineType"] }}
     mmsGroupId: {{ properties["mmsGroupId"] }}
@@ -33,6 +34,7 @@ resources:
 
 - name: mongodb-instance-3
   type: mongodb-instance-template.jinja
+  properties:
     zone: {{ properties["zone"] }}
     machineType: {{ properties["machineType"] }}
     mmsGroupId: {{ properties["mmsGroupId"] }}
