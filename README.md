@@ -60,7 +60,7 @@ The Deployment Manager configuration creates three 500GB Persistent SSDs and att
 
 ## Deploy MongoDB using Cloud Manager
 
-Once the instances have completed the setup process, they should be visible via `Cloud Manager > Deployment > Servers` in a few minutes.
+Once the instances have completed the setup process, they should be visible via `Cloud Manager > Deployment > Servers` in a few minutes. To deploy MongoDB, refer to the instructions for [Deploying a Replica Set](https://docs.cloud.mongodb.com/tutorial/deploy-replica-set/).
 
 ## Clean Up
 
@@ -73,6 +73,7 @@ Next, delete the deployment from Google Cloud Platform.
     $ gcloud deployment-manager deployments delete mongodb-cloud-manager
 
 ## Notes
+- Three instances are created by this configuration, sufficient for a MongoDB Replica Set. To deploy a MongoDB Sharded Cluster, consider adding additional instance entries in the [mongodb-cloud-manager.jinja](mongodb-cloud-manager.jinja) configuration template.
 - Instances are created within the `default` network however no MongoDB-specific firewall rules are added. To add rules that allow incoming traffic to your MongoDB deployment, refer to the [Firewalls](https://cloud.google.com/compute/docs/networking#firewalls) documentation.
 - The [Google Cloud Platform Pricing Calculator](https://cloud.google.com/products/calculator) estimate of the monthly costs to run this deplyoment configuration can be found [here](https://cloud.google.com/products/calculator/#id=5561bb46-da61-4c64-aaa1-2f69d6d7b310)
 
