@@ -55,10 +55,10 @@ resources:
           echo never > /sys/kernel/mm/transparent_hugepage/defrag
 
           # download the latest mongodb cloud manager agent
-          curl -OL https://cloud.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager_2.7.2.1653-1_amd64.ubuntu1604.deb
+          curl -OL https://cloud.mongodb.com/download/agent/automation/mongodb-mms-automation-agent-manager_latest_amd64.ubuntu1604.deb
           
           # install the mongodb cloud manager agent
-          dpkg -i mongodb-mms-automation-agent-manager_2.7.2.1653-1_amd64.ubuntu1604.deb
+          dpkg -i mongodb-mms-automation-agent-manager_latest_amd64.ubuntu1604.deb
 
           # configure the agent with cloud manager mmsGroupId and mmsApiKey
           sed -i '/mmsGroupId/c\mmsGroupId={{ properties["mmsGroupId"] }}' /etc/mongodb-mms/automation-agent.config
