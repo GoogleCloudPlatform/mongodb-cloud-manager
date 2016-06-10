@@ -15,6 +15,8 @@ Bootstrap multiple Google Compute Engine instances with the MongoDB Cloud Manage
 - Create a [MongoDB Cloud Manager](https://www.mongodb.com/cloud) account
 - Navigate to `Cloud Manager > Settings > Group Settings` and copy the `Group ID` and `Agent API Key` at the top of the page, you will need these values below.
 
+> **Note**: MongoDB Cloud Manager is a paid service from MongoDB, Inc. and is governed by the [MongoDB Cloud Manager terms of service](https://cloud.mongodb.com/links/terms-of-service)
+
 ## Deploying Configuration
 
 ### Properties
@@ -70,6 +72,7 @@ Next, delete the deployment from Google Cloud Platform.
 
 > **Note** that all configuration resources (instances, disks) will be deleted.
     
+
     $ gcloud deployment-manager deployments delete mongodb-cloud-manager
 
 ## Notes
