@@ -12,7 +12,7 @@ Bootstrap multiple Google Compute Engine instances with the MongoDB Cloud Manage
 - Set the preferred zone: `gcloud config set compute/zone ZONE`
 
 ### MongoDB Cloud Manager
-- Create a [MongoDB Cloud Manager](https://www.mongodb.com/cloud) account
+- Create a [MongoDB Cloud Manager](https://www.mongodb.com/cloud/cloud-manager) account
 - Navigate to `Cloud Manager > Settings > Group Settings` and copy the `Group ID` and `Agent API Key` at the top of the page, you will need these values below.
 
 > **Note**: MongoDB Cloud Manager is a paid service from MongoDB, Inc. and is governed by the [MongoDB Cloud Manager terms of service](https://cloud.mongodb.com/links/terms-of-service)
@@ -49,24 +49,24 @@ The Deployment Manager template uses a [schema](https://cloud.google.com/deploym
 Create the deployment using the Deployment Manager configuration template:
 
     $ gcloud deployment-manager deployments create mongodb-cloud-manager \
-      --config mongodb-cloud-manager.jinja \
-      --properties mmsGroupId=MMSGROUPID,mmsApiKey=MMSAPIKEY
+      --template mongodb-cloud-manager.jinja \
+      --properties mmsGroupId:MMSGROUPID,mmsApiKey:MMSAPIKEY
 
 Optionally, to override the default values for `machineType` or `zone` use the following:
 
     $ gcloud deployment-manager deployments create mongodb-cloud-manager \
-      --config mongodb-cloud-manager.jinja \
-      --properties machineType=n1-highmem-8,zone=us-central1-d,mmsGroupId=MMSGROUPID,mmsApiKey=MMSAPIKEY
+      --template mongodb-cloud-manager.jinja \
+      --properties machineType:n1-highmem-8,zone:us-central1-d,mmsGroupId:MMSGROUPID,mmsApiKey:MMSAPIKEY
 
 The Deployment Manager configuration creates three 500GB Persistent SSDs and attaches them to three Compute Engine instances. Each instance then runs a startup script that configures and attaches storage, and installs the MongoDB Cloud Manager automation agent.
 
 ## Deploy MongoDB using Cloud Manager
 
-Once the instances have completed the setup process, they should be visible via `Cloud Manager > Deployment > Servers` in a few minutes. To deploy MongoDB, refer to the instructions for [Deploying a Replica Set](https://docs.cloud.mongodb.com/tutorial/deploy-replica-set/).
+Once the instances have completed the setup process, they should be visible via `Cloud Manager > Deployment > Servers` in a few minutes. To deploy MongoDB, refer to the instructions for [Deploying a Replica Set](https://docs.cloudmanager.mongodb.com/tutorial/deploy-replica-set/).
 
 ## Clean Up
 
-First, unmanage the deployment via Cloud Manager. Refer to the documentation on [Removing a Process from Management](https://docs.cloud.mongodb.com/tutorial/unmanage-deployment/) for more information.
+First, unmanage the deployment via Cloud Manager. Refer to the documentation on [Removing a Process from Management](https://docs.cloudmanager.mongodb.com/tutorial/unmanage-deployment/) for more information.
 
 Next, delete the deployment from Google Cloud Platform. 
 
