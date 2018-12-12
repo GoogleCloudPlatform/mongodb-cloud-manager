@@ -65,7 +65,7 @@ resources:
           sed -i '/mmsApiKey/c\mmsApiKey={{ properties["mmsApiKey"] }}' /etc/mongodb-mms/automation-agent.config
 
           # create filesystem on persistent storage
-          mkfs.ext4 -F -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/disk/by-id/google-{{ env["name"] }}-data
+          mkfs.xfs -f /dev/disk/by-id/google-{{ env["name"] }}-data
 
           # create mongodb data directory
           mkdir /data
@@ -77,7 +77,7 @@ resources:
           chown mongodb:mongodb /data
 
           # add an entry to /etc/fstab for persistent disk
-          echo '/dev/disk/by-id/google-{{ env["name"] }}-data /data ext4 discard,defaults 1 1' | tee -a /etc/fstab
+          echo '/dev/disk/by-id/google-{{ env["name"] }}-data /data xfs discard,defaults 1 1' | tee -a /etc/fstab
 
           # start the mongodb cloud manager agent
           systemctl start mongodb-mms-automation-agent.service
